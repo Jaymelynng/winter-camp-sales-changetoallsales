@@ -4,14 +4,12 @@ import { CallStageGuide } from "./toolkit/CallStageGuide";
 import { CommonQuestions } from "./toolkit/CommonQuestions";
 import { cn } from "@/lib/utils";
 import { Lead } from "@/types/lead";
-import { CallbackTracker } from "./toolkit/CallbackTracker";
 import { ToolkitHeader } from "./toolkit/ToolkitHeader";
 
 export const SalesToolkit = () => {
   const [callStage, setCallStage] = useState<string>("introduction");
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-  const [callbackNotes, setCallbackNotes] = useState<string>("");
 
   return (
     <div 
@@ -26,11 +24,6 @@ export const SalesToolkit = () => {
         <ToolkitHeader isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
         <QuickScripts callStage={callStage} />
         <CommonQuestions />
-        <CallbackTracker 
-          selectedLead={selectedLead}
-          callbackNotes={callbackNotes}
-          setCallbackNotes={setCallbackNotes}
-        />
       </div>
     </div>
   );
