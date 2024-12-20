@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { FileUpIcon, ClipboardPasteIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useGym } from "@/contexts/GymContext";
-import { Lead } from "@/types/lead";
+import { Lead, LeadInput } from "@/types/lead";
 import { createLead } from "@/lib/supabase";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -101,7 +101,7 @@ export function LeadImporter() {
       .join(' ');
   };
 
-const processLeadData = async (data: string) => {
+  const processLeadData = async (data: string) => {
     if (!currentGym) {
       toast.error("Please select a gym first");
       return;

@@ -45,6 +45,7 @@ export function LeadDialog({ lead, onSave, gymId }: LeadDialogProps) {
       lead_source: values.lead_source || "",
       lead_temperature: values.lead_temperature,
       gym_id: values.gym_id,
+      registration_date: new Date().toISOString(),
     };
     onSave(leadData);
     toast.success("Lead saved successfully!");

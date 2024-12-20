@@ -3,7 +3,7 @@ import { LeadsTable } from "@/components/LeadsTable";
 import { StatsCards } from "@/components/StatsCards";
 import { LeadDialog } from "@/components/lead/LeadDialog";
 import { LeadHeader } from "@/components/lead/LeadHeader";
-import { Lead } from "@/types/lead";
+import { Lead, LeadInput } from "@/types/lead";
 import { toast } from "sonner";
 import { useLeads } from "@/hooks/useLeads";
 import { useGym } from "@/contexts/GymContext";
