@@ -9,7 +9,6 @@ import { useLeads } from "@/hooks/useLeads";
 import { useGym } from "@/contexts/GymContext";
 import { SalesToolkit } from "@/components/toolkit/SalesToolkit";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
 
 const Index = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | undefined>();
@@ -92,6 +91,16 @@ const Index = () => {
 
             <StatsCards leads={filteredLeads} />
 
+            {/* Horizontal Sales Toolkit */}
+            {showToolkit && (
+              <div className="bg-white rounded-lg shadow-md border border-custom-light">
+                <div className="p-4">
+                  <h3 className="text-sm font-medium text-custom-slate mb-4">Sales Toolkit</h3>
+                  <SalesToolkit />
+                </div>
+              </div>
+            )}
+
             {isLoading ? (
               <div className="flex justify-center items-center h-64">
                 <p className="text-[#8f93a0]">Loading leads...</p>
@@ -107,26 +116,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-
-      {/* Floating Sales Toolkit */}
-      {showToolkit && (
-        <div className="fixed top-4 right-4 w-[300px] bg-white rounded-lg shadow-xl border border-custom-light z-50">
-          <div className="flex justify-between items-center p-2 border-b border-custom-light">
-            <h3 className="text-sm font-medium text-custom-slate">Sales Toolkit</h3>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowToolkit(false)}
-              className="h-8 w-8"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="max-h-[calc(100vh-6rem)] overflow-y-auto">
-            <SalesToolkit />
-          </div>
-        </div>
-      )}
     </div>
   );
 };
