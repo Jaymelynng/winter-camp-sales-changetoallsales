@@ -35,7 +35,6 @@ export type Database = {
           child_name: string | null
           created_at: string
           email: string
-          event: string
           facility: string
           gym_id: string | null
           id: string
@@ -51,7 +50,6 @@ export type Database = {
           child_name?: string | null
           created_at?: string
           email: string
-          event: string
           facility: string
           gym_id?: string | null
           id?: string
@@ -67,7 +65,6 @@ export type Database = {
           child_name?: string | null
           created_at?: string
           email?: string
-          event?: string
           facility?: string
           gym_id?: string | null
           id?: string
