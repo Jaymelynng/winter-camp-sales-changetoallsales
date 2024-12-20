@@ -8,10 +8,13 @@ import { toast } from "sonner";
 import { useLeads } from "@/hooks/useLeads";
 import { useGym } from "@/contexts/GymContext";
 import { SalesToolkit } from "@/components/toolkit/SalesToolkit";
+import { Button } from "@/components/ui/button";
+import { X } from "lucide-react";
 
 const Index = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | undefined>();
   const [searchTerm, setSearchTerm] = useState("");
+  const [showToolkit, setShowToolkit] = useState(false);
   const { currentGym } = useGym();
   const { leads, isLoading, createLead, updateLead } = useLeads();
 
@@ -66,8 +69,8 @@ const Index = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-custom-light/10">
-      <div className="flex-1 overflow-auto px-4 md:px-8">
+    <div className="min-h-screen bg-custom-light/10">
+      <div className="px-4 md:px-8">
         <div className="py-6 md:py-10 max-w-[1400px] mx-auto">
           <div className="flex flex-col space-y-6 md:space-y-8">
             <div className="flex justify-between items-center">
@@ -76,6 +79,13 @@ const Index = () => {
                 onSave={handleSaveLead}
                 gymId={currentGym?.id}
               />
+              <Button
+                variant="outline"
+                onClick={() => setShowToolkit(!showToolkit)}
+                className="bg-white hover:bg-custom-light/20"
+              >
+                {showToolkit ? "Hide Toolkit" : "Show Toolkit"}
+              </Button>
             </div>
 
             <LeadHeader onExport={handleExportLeads} />
@@ -97,9 +107,26 @@ const Index = () => {
           </div>
         </div>
       </div>
-      <div className="w-[300px] border-l border-custom-light bg-white shadow-lg">
-        <SalesToolkit />
-      </div>
+
+      {/* Floating Sales Toolkit */}
+      {showToolkit && (
+        <div className="fixed top-4 right-4 w-[300px] bg-white rounded-lg shadow-xl border border-custom-light z-50">
+          <div className="flex justify-between items-center p-2 border-b border-custom-light">
+            <h3 className="text-sm font-medium text-custom-slate">Sales Toolkit</h3>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setShowToolkit(false)}
+              className="h-8 w-8"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+          <div className="max-h-[calc(100vh-6rem)] overflow-y-auto">
+            <SalesToolkit />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -12,23 +12,20 @@ export function SalesToolkit() {
   const [callbackNotes, setCallbackNotes] = useState("");
 
   return (
-    <div className="h-screen overflow-y-auto scrollbar-hidden">
-      <div className="p-4">
-        <h2 className="text-lg font-semibold text-custom-slate mb-4">Sales Toolkit</h2>
-        <Accordion type="single" collapsible className="space-y-2">
-          <CallStageGuide 
-            callStage={callStage} 
-            setCallStage={setCallStage} 
-          />
-          <ScriptsSection />
-          <FaqSection />
-          <CallbackTracker 
-            selectedLead={selectedLead}
-            callbackNotes={callbackNotes}
-            setCallbackNotes={setCallbackNotes}
-          />
-        </Accordion>
-      </div>
+    <div className="p-4">
+      <Accordion type="single" collapsible className="space-y-2">
+        <CallStageGuide 
+          callStage={callStage} 
+          setCallStage={setCallStage} 
+        />
+        <ScriptsSection />
+        <FaqSection />
+        <CallbackTracker 
+          selectedLead={selectedLead}
+          callbackNotes={callbackNotes}
+          setCallbackNotes={setCallbackNotes}
+        />
+      </Accordion>
     </div>
   );
 }
