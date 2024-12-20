@@ -6,6 +6,7 @@ import { toast } from "sonner";
 interface Gym {
   id: string;
   name: string;
+  location: string;
 }
 
 interface GymContextType {
