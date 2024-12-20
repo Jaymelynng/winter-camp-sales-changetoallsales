@@ -3,6 +3,9 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Button } from "@/components/ui/button";
 import { MessageSquare, HelpCircle, Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { RichTextEditor } from "../RichTextEditor";
+import { useState } from "react";
 
 interface QuickScriptsProps {
   callStage: string;
@@ -10,6 +13,7 @@ interface QuickScriptsProps {
 
 export const QuickScripts = ({ callStage }: QuickScriptsProps) => {
   const { toast } = useToast();
+  const [notes, setNotes] = useState("");
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -69,17 +73,33 @@ export const QuickScripts = ({ callStage }: QuickScriptsProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="relative bg-gray-50 p-4 rounded-lg group">
-          <h4 className="font-semibold mb-2">{script.title}</h4>
-          <p className="text-sm text-muted-foreground">{script.text}</p>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
-            onClick={() => copyToClipboard(script.text)}
-          >
-            <Copy className="w-4 h-4" />
-          </Button>
+        <Accordion type="single" collapsible>
+          <AccordionItem value="script">
+            <AccordionTrigger className="font-semibold text-custom-slate">
+              {script.title}
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="relative bg-gray-50 p-4 rounded-lg group">
+                <p className="text-sm text-muted-foreground">{script.text}</p>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => copyToClipboard(script.text)}
+                >
+                  <Copy className="w-4 h-4" />
+                </Button>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        <div className="space-y-2">
+          <h4 className="font-semibold text-custom-slate">Call Notes</h4>
+          <RichTextEditor 
+            content={notes} 
+            onChange={setNotes}
+          />
         </div>
       </CardContent>
     </Card>

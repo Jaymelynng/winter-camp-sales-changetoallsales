@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
+import TextAlign from '@tiptap/extension-text-align';
 import { Toggle } from './ui/toggle';
 import {
   Bold,
@@ -26,6 +27,9 @@ export function RichTextEditor({ content, onChange, editable = true }: RichTextE
       TaskList,
       TaskItem.configure({
         nested: true,
+      }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
       }),
     ],
     content,
