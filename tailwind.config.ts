@@ -22,6 +22,14 @@ export default {
         inter: ["Inter", "sans-serif"],
       },
       colors: {
+        // Custom color palette
+        'custom': {
+          'mauve': '#b48f8f',
+          'light': '#cec4c1',
+          'slate': '#8f93a0',
+          'white': '#f9fafb',
+          'gray': '#b4acb0',
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
