@@ -29,7 +29,7 @@ export function GymProvider({ children }: { children: ReactNode }) {
     queryFn: getGyms,
     meta: {
       onError: () => {
-        toast.error("Failed to load gyms");
+        toast.error("Failed to load gyms. Please check your connection.");
       }
     }
   });
