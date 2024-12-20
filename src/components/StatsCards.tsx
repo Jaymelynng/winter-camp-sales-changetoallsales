@@ -7,14 +7,13 @@ interface StatsCardsProps {
 }
 
 export function StatsCards({ leads }: StatsCardsProps) {
-  // Calculate stats based on lead statuses
   const totalLeads = leads.length;
   const newLeads = leads.filter((lead) => lead.status === "new").length;
   const convertedLeads = leads.filter((lead) => lead.status === "converted").length;
   const conversionRate = totalLeads > 0 ? Math.round((convertedLeads / totalLeads) * 100) : 0;
   const todayConversions = leads.filter((lead) => 
     lead.status === "converted" && 
-    new Date(lead.registrationDate).toDateString() === new Date().toDateString()
+    new Date(lead.registration_date).toDateString() === new Date().toDateString()
   ).length;
 
   return (

@@ -31,7 +31,7 @@ export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsT
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Lead;
     direction: "asc" | "desc";
-  }>({ key: "fullName", direction: "asc" });
+  }>({ key: "full_name", direction: "asc" });
   
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -82,8 +82,8 @@ export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsT
                 className={selectedLead?.id === lead.id ? "bg-custom-light/20" : ""}
                 onClick={() => setSelectedLead(lead)}
               >
-                <TableCell className="font-medium">{lead.fullName}</TableCell>
-                <TableCell>{lead.parentName}</TableCell>
+                <TableCell className="font-medium">{lead.full_name}</TableCell>
+                <TableCell>{lead.parent_name}</TableCell>
                 <TableCell>
                   <div className="flex flex-col">
                     <span>{lead.phone}</span>

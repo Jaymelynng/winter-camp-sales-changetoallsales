@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { LeadsTable } from "@/components/LeadsTable";
 import { StatsCards } from "@/components/StatsCards";
 import { LeadDialog } from "@/components/lead/LeadDialog";
@@ -6,18 +6,16 @@ import { mockLeads } from "@/data/mockLeads";
 import { Lead } from "@/types/lead";
 import { Button } from "@/components/ui/button";
 import { FileUpIcon, Download } from "lucide-react";
-import { SalesToolkit } from "@/components/SalesToolkit";
 import { toast } from "sonner";
 
 const Index = () => {
   const [leads, setLeads] = useState<Lead[]>(mockLeads);
   const [selectedLead, setSelectedLead] = useState<Lead | undefined>();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredLeads = leads.filter((lead) =>
     Object.values(lead).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
@@ -28,10 +26,12 @@ const Index = () => {
       ));
       setSelectedLead(undefined);
     } else {
-      const newLead = {
+      const newLead: Lead = {
         ...data,
         id: (leads.length + 1).toString(),
-        registrationDate: new Date().toISOString().split('T')[0]
+        gym_id: null,
+        registration_date: new Date().toISOString(),
+        created_at: new Date().toISOString(),
       } as Lead;
       setLeads([...leads, newLead]);
     }
@@ -39,8 +39,21 @@ const Index = () => {
   };
 
   const handleExportLeads = () => {
+    const headers = ["Full Name", "Parent Name", "Phone", "Email", "Event", "Facility", "Status", "Registration Date"];
     const csvContent = "data:text/csv;charset=utf-8," + 
-      leads.map(lead => Object.values(lead).join(",")).join("\n");
+      [headers.join(",")].concat(
+        leads.map(lead => [
+          lead.full_name,
+          lead.parent_name,
+          lead.phone,
+          lead.email,
+          lead.event,
+          lead.facility,
+          lead.status,
+          new Date(lead.registration_date).toLocaleDateString()
+        ].join(","))
+      ).join("\n");
+    
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
@@ -57,20 +70,22 @@ const Index = () => {
       const reader = new FileReader();
       reader.onload = (e) => {
         const text = e.target?.result as string;
-        const rows = text.split("\n");
-        const newLeads = rows.map((row, index) => {
+        const [headers, ...rows] = text.split("\n");
+        const newLeads: Lead[] = rows.map((row, index) => {
           const values = row.split(",");
           return {
             id: (leads.length + index + 1).toString(),
-            fullName: values[0] || "",
-            parentName: values[1] || "",
+            gym_id: null,
+            full_name: values[0] || "",
+            parent_name: values[1] || "",
             phone: values[2] || "",
             email: values[3] || "",
             event: values[4] || "",
-            registrationDate: values[5] || new Date().toISOString().split('T')[0],
-            facility: values[6] || "",
-            notes: values[7] || "",
-            status: values[8] as Lead["status"] || "new"
+            facility: values[5] || "",
+            status: (values[6] as Lead["status"]) || "new",
+            notes: "",
+            registration_date: new Date().toISOString(),
+            created_at: new Date().toISOString()
           };
         });
         setLeads([...leads, ...newLeads]);
@@ -82,21 +97,12 @@ const Index = () => {
 
   return (
     <div className="flex h-screen bg-custom-white">
-      {isSidebarOpen && <SalesToolkit />}
-      
       <div className="flex-1 overflow-auto">
         <div className="container py-10">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">
               <h1 className="text-3xl font-bold text-custom-slate">Winter Camp Sales Toolkit</h1>
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-                  className="border-custom-light text-custom-slate hover:bg-custom-light/10"
-                >
-                  {isSidebarOpen ? "Hide Toolkit" : "Show Toolkit"}
-                </Button>
                 <div className="flex gap-2">
                   <Button 
                     variant="outline" 
@@ -138,7 +144,7 @@ const Index = () => {
 
             <LeadsTable
               leads={filteredLeads}
-              onEdit={(lead) => setSelectedLead(lead)}
+              onEdit={setSelectedLead}
               searchTerm={searchTerm}
               onSearchChange={setSearchTerm}
             />

@@ -25,9 +25,9 @@ export const CallbackTracker = ({
           {selectedLead ? (
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <h4 className="font-medium text-custom-slate">{selectedLead.fullName}</h4>
+                <h4 className="font-medium text-custom-slate">{selectedLead.full_name}</h4>
                 <span className="text-sm text-custom-gray">
-                  {formatDate(selectedLead.registrationDate)}
+                  {formatDate(selectedLead.registration_date)}
                 </span>
               </div>
               <RichTextEditor
