@@ -1,4 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
+import { Lead } from '@/types/lead';
 
 // Helper functions for gym operations
 export const getGyms = async () => {
@@ -20,10 +21,10 @@ export const getLeadsByGym = async (gymId: string) => {
     .order('created_at', { ascending: false });
   
   if (error) throw error;
-  return data;
+  return data as Lead[];
 };
 
-export const createLead = async (lead: any) => {
+export const createLead = async (lead: Partial<Lead>) => {
   const { data, error } = await supabase
     .from('leads')
     .insert([lead])
@@ -34,7 +35,7 @@ export const createLead = async (lead: any) => {
   return data;
 };
 
-export const updateLead = async (id: string, updates: any) => {
+export const updateLead = async (id: string, updates: Partial<Lead>) => {
   const { data, error } = await supabase
     .from('leads')
     .update(updates)

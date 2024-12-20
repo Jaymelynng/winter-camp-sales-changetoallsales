@@ -46,7 +46,7 @@ export default function GymDashboard() {
       </div>
       <LeadsTable
         leads={filteredLeads}
-        onEdit={(lead) => handleSaveLead(lead)}
+        onEdit={handleSaveLead}
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
       />
