@@ -75,7 +75,6 @@ export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsT
               <TableHead>Parent Name</TableHead>
               <TableHead>Child Name</TableHead>
               <TableHead>Contact</TableHead>
-              <TableHead>Event</TableHead>
               <TableHead>Facility</TableHead>
               <TableHead>Source</TableHead>
               <TableHead>Temperature</TableHead>
@@ -100,7 +99,6 @@ export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsT
                     </span>
                   </div>
                 </TableCell>
-                <TableCell>{lead.event}</TableCell>
                 <TableCell>{lead.facility}</TableCell>
                 <TableCell>{lead.lead_source}</TableCell>
                 <TableCell>

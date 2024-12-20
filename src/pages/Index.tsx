@@ -7,6 +7,7 @@ import { Lead, LeadInput } from "@/types/lead";
 import { toast } from "sonner";
 import { useLeads } from "@/hooks/useLeads";
 import { useGym } from "@/contexts/GymContext";
+import { SalesToolkit } from "@/components/SalesToolkit";
 
 const Index = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | undefined>();
@@ -38,7 +39,7 @@ const Index = () => {
   };
 
   const handleExportLeads = () => {
-    const headers = ["Parent Name", "Child Name", "Phone", "Email", "Event", "Facility", "Status", "Registration Date", "Lead Source", "Temperature"];
+    const headers = ["Parent Name", "Child Name", "Phone", "Email", "Facility", "Status", "Registration Date", "Lead Source", "Temperature"];
     const csvContent = "data:text/csv;charset=utf-8," + 
       [headers.join(",")].concat(
         leads.map(lead => [
@@ -46,7 +47,6 @@ const Index = () => {
           lead.child_name,
           lead.phone,
           lead.email,
-          lead.event,
           lead.facility,
           lead.status,
           new Date(lead.registration_date).toLocaleDateString(),
@@ -78,9 +78,7 @@ const Index = () => {
               />
             </div>
 
-            <LeadHeader
-              onExport={handleExportLeads}
-            />
+            <LeadHeader onExport={handleExportLeads} />
 
             <StatsCards leads={filteredLeads} />
 
@@ -99,6 +97,7 @@ const Index = () => {
           </div>
         </div>
       </div>
+      <SalesToolkit />
     </div>
   );
 };

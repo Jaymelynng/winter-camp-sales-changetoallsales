@@ -10,7 +10,6 @@ export const formSchema = z.object({
   child_name: z.string().optional(),
   phone: z.string().min(10, "Valid phone number is required"),
   email: z.string().email("Valid email is required"),
-  event: z.string().min(2, "Event is required"),
   facility: z.string().min(2, "Facility is required"),
   notes: z.string(),
   status: z.enum(["new", "contacted", "converted", "lost"]),
@@ -75,19 +74,6 @@ export function LeadFormFields({ form }: LeadFormFieldsProps) {
             <FormLabel>Email</FormLabel>
             <FormControl>
               <Input {...field} type="email" />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="event"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Event</FormLabel>
-            <FormControl>
-              <Input {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>

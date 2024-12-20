@@ -5,7 +5,6 @@ export interface Lead {
   child_name: string | null;
   phone: string;
   email: string;
-  event: string;
   facility: string;
   notes: string | null;
   status: 'new' | 'contacted' | 'converted' | 'lost';
