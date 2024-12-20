@@ -24,7 +24,7 @@ export function LeadTableHeader({ searchTerm, onSearchChange, onSort }: LeadTabl
       <div className="flex gap-2">
         <Button
           variant="ghost"
-          onClick={() => onSort("full_name")}
+          onClick={() => onSort("parent_name")}
           className="text-custom-slate hover:text-custom-mauve"
         >
           <ArrowUpDown className="h-4 w-4 mr-2" />

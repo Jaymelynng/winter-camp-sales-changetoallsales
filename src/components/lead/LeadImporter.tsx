@@ -101,7 +101,7 @@ export function LeadImporter() {
       .join(' ');
   };
 
-  const processLeadData = async (data: string) => {
+const processLeadData = async (data: string) => {
     if (!currentGym) {
       toast.error("Please select a gym first");
       return;
@@ -119,20 +119,22 @@ export function LeadImporter() {
         const values = row.split(",").map(val => val.trim());
         if (values.length < 6) continue;
 
-        const leadData = {
-          full_name: values[0] || "",
-          parent_name: values[1] || "",
+        const leadData: LeadInput = {
+          parent_name: values[0] || "",
+          child_name: values[1] || "",
           phone: values[2] || "",
           email: values[3] || "",
           event: values[4] || "",
           facility: normalizeGymName(values[5] || ""),
           status: (values[6]?.toLowerCase() as Lead["status"]) || "new",
           notes: "",
+          lead_source: "",
+          lead_temperature: "warm",
           gym_id: currentGym.id
         };
 
         // Basic validation
-        if (!leadData.full_name || !leadData.email) {
+        if (!leadData.parent_name || !leadData.email) {
           errorCount++;
           console.warn("Skipping invalid lead:", leadData);
           continue;

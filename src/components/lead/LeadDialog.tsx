@@ -20,28 +20,32 @@ export function LeadDialog({ lead, onSave, gymId }: LeadDialogProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      full_name: lead?.full_name || "",
       parent_name: lead?.parent_name || "",
+      child_name: lead?.child_name || "",
       phone: lead?.phone || "",
       email: lead?.email || "",
       event: lead?.event || "",
       facility: lead?.facility || "",
       notes: lead?.notes || "",
       status: lead?.status || "new",
+      lead_source: lead?.lead_source || "",
+      lead_temperature: lead?.lead_temperature || "warm",
       gym_id: lead?.gym_id || gymId || null,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const leadData: LeadInput = {
-      full_name: values.full_name,
       parent_name: values.parent_name,
+      child_name: values.child_name,
       phone: values.phone,
       email: values.email,
       event: values.event,
       facility: values.facility,
       notes: values.notes || "",
       status: values.status,
+      lead_source: values.lead_source || "",
+      lead_temperature: values.lead_temperature,
       gym_id: values.gym_id,
     };
     onSave(leadData);

@@ -38,18 +38,20 @@ const Index = () => {
   };
 
   const handleExportLeads = () => {
-    const headers = ["Full Name", "Parent Name", "Phone", "Email", "Event", "Facility", "Status", "Registration Date"];
+    const headers = ["Parent Name", "Child Name", "Phone", "Email", "Event", "Facility", "Status", "Registration Date", "Lead Source", "Temperature"];
     const csvContent = "data:text/csv;charset=utf-8," + 
       [headers.join(",")].concat(
         leads.map(lead => [
-          lead.full_name,
           lead.parent_name,
+          lead.child_name,
           lead.phone,
           lead.email,
           lead.event,
           lead.facility,
           lead.status,
-          new Date(lead.registration_date).toLocaleDateString()
+          new Date(lead.registration_date).toLocaleDateString(),
+          lead.lead_source,
+          lead.lead_temperature
         ].join(","))
       ).join("\n");
     
