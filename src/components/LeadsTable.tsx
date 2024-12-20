@@ -16,6 +16,8 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 import { RichTextEditor } from "./RichTextEditor";
+import { LeadTableHeader } from "./lead/LeadTableHeader";
+import { useState } from "react";
 
 interface LeadsTableProps {
   leads: Lead[];
@@ -30,92 +32,128 @@ const statusColors = {
 };
 
 export function LeadsTable({ leads, onEdit }: LeadsTableProps) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortConfig, setSortConfig] = useState<{
+    key: keyof Lead;
+    direction: "asc" | "desc";
+  }>({ key: "fullName", direction: "asc" });
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
 
-  return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Full Name</TableHead>
-            <TableHead>Parent/Guardian</TableHead>
-            <TableHead>Contact</TableHead>
-            <TableHead>Event</TableHead>
-            <TableHead>Facility</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Notes</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {leads.map((lead) => (
-            <TableRow key={lead.id}>
-              <TableCell className="font-medium">{lead.fullName}</TableCell>
-              <TableCell>{lead.parentName}</TableCell>
-              <TableCell>
-                <div className="flex flex-col">
-                  <span>{lead.phone}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {lead.email}
-                  </span>
-                </div>
-              </TableCell>
-              <TableCell>{lead.event}</TableCell>
-              <TableCell>{lead.facility}</TableCell>
-              <TableCell>
-                <Badge
-                  className={`${
-                    statusColors[lead.status]
-                  } text-white capitalize`}
-                >
-                  {lead.status}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <HoverCard>
-                  <HoverCardTrigger asChild>
-                    <Button variant="ghost" size="icon" className="text-custom-slate hover:text-custom-mauve">
-                      <ScrollTextIcon className="h-4 w-4" />
-                    </Button>
-                  </HoverCardTrigger>
+  const handleSort = (column: keyof Lead) => {
+    setSortConfig({
+      key: column,
+      direction:
+        sortConfig.key === column && sortConfig.direction === "asc"
+          ? "desc"
+          : "asc",
+    });
+  };
 
-                  <HoverCardContent className="w-80 bg-custom-white border-custom-light">
-                    <div className="space-y-2">
-                      <h4 className="text-sm font-semibold text-custom-slate">Notes History</h4>
-                      <div className="text-sm text-custom-slate">
-                        <div className="space-y-2">
-                          <div className="border-l-2 border-custom-mauve pl-3">
-                            <p className="text-xs text-custom-gray">
-                              {formatDate(lead.registrationDate)}
-                            </p>
-                            <RichTextEditor
-                              content={lead.notes}
-                              onChange={() => {}}
-                              editable={false}
-                            />
+  const filteredAndSortedLeads = leads
+    .filter((lead) =>
+      Object.values(lead).some((value) =>
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    )
+    .sort((a, b) => {
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
+      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+      return 0;
+    });
+
+  return (
+    <div className="space-y-4">
+      <LeadTableHeader
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        onSort={handleSort}
+      />
+      
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Full Name</TableHead>
+              <TableHead>Parent/Guardian</TableHead>
+              <TableHead>Contact</TableHead>
+              <TableHead>Event</TableHead>
+              <TableHead>Facility</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Notes</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredAndSortedLeads.map((lead) => (
+              <TableRow key={lead.id}>
+                <TableCell className="font-medium">{lead.fullName}</TableCell>
+                <TableCell>{lead.parentName}</TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span>{lead.phone}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {lead.email}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>{lead.event}</TableCell>
+                <TableCell>{lead.facility}</TableCell>
+                <TableCell>
+                  <Badge
+                    className={`${
+                      statusColors[lead.status]
+                    } text-white capitalize`}
+                  >
+                    {lead.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <Button variant="ghost" size="icon" className="text-custom-slate hover:text-custom-mauve">
+                        <ScrollTextIcon className="h-4 w-4" />
+                      </Button>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-80 bg-custom-white border-custom-light">
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-semibold text-custom-slate">Notes History</h4>
+                        <div className="text-sm text-custom-slate">
+                          <div className="space-y-2">
+                            <div className="border-l-2 border-custom-mauve pl-3">
+                              <p className="text-xs text-custom-gray">
+                                {formatDate(lead.registrationDate)}
+                              </p>
+                              <RichTextEditor
+                                content={lead.notes}
+                                onChange={() => {}}
+                                editable={false}
+                              />
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </HoverCardContent>
-
-                </HoverCard>
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => onEdit(lead)}
-                >
-                  <PencilIcon className="h-4 w-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                    </HoverCardContent>
+                  </HoverCard>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => onEdit(lead)}
+                  >
+                    <PencilIcon className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
