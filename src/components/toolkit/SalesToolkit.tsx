@@ -1,33 +1,21 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScriptsSection } from "./ScriptsSection";
+import { Accordion } from "@/components/ui/accordion";
+import { CallStageGuide } from "./CallStageGuide";
+import { CallbackTracker } from "./CallbackTracker";
 import { FaqSection } from "./FaqSection";
+import { ScriptsSection } from "./ScriptsSection";
 
 export function SalesToolkit() {
   return (
-    <div className="w-96 border-l border-[#cec4c1] bg-white p-6 overflow-y-auto shadow-lg">
-      <h2 className="text-2xl font-bold text-[#b48f8f] mb-6 border-b border-[#cec4c1] pb-3">Sales Toolkit</h2>
-      <Tabs defaultValue="scripts" className="w-full">
-        <TabsList className="w-full bg-[#f9fafb] mb-4">
-          <TabsTrigger 
-            value="scripts" 
-            className="flex-1 text-[#8f93a0] data-[state=active]:bg-[#b48f8f] data-[state=active]:text-white"
-          >
-            Scripts
-          </TabsTrigger>
-          <TabsTrigger 
-            value="faq" 
-            className="flex-1 text-[#8f93a0] data-[state=active]:bg-[#b48f8f] data-[state=active]:text-white"
-          >
-            FAQ
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="scripts" className="mt-2">
+    <div className="h-screen overflow-y-auto scrollbar-hidden">
+      <div className="p-4">
+        <h2 className="text-lg font-semibold text-custom-slate mb-4">Sales Toolkit</h2>
+        <Accordion type="single" collapsible className="space-y-2">
+          <CallStageGuide />
           <ScriptsSection />
-        </TabsContent>
-        <TabsContent value="faq" className="mt-2">
           <FaqSection />
-        </TabsContent>
-      </Tabs>
+          <CallbackTracker />
+        </Accordion>
+      </div>
     </div>
   );
 }

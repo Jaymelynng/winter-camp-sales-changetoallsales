@@ -66,10 +66,10 @@ const Index = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#f9fafb]">
-      <div className="flex-1 overflow-auto">
-        <div className="container py-10">
-          <div className="flex flex-col space-y-8">
+    <div className="flex min-h-screen bg-[#f9fafb]">
+      <div className="flex-1 overflow-auto px-4 md:px-8">
+        <div className="py-6 md:py-10 max-w-[1400px] mx-auto">
+          <div className="flex flex-col space-y-6 md:space-y-8">
             <div className="flex justify-between items-center">
               <LeadDialog
                 lead={selectedLead}
@@ -97,7 +97,9 @@ const Index = () => {
           </div>
         </div>
       </div>
-      <SalesToolkit />
+      <div className="w-[300px] border-l border-custom-light bg-white">
+        <SalesToolkit />
+      </div>
     </div>
   );
 };
