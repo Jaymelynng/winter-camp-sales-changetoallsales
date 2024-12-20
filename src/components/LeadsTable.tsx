@@ -9,7 +9,12 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PencilIcon } from "lucide-react";
+import { PencilIcon, ScrollTextIcon } from "lucide-react";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 interface LeadsTableProps {
   leads: Lead[];
@@ -24,6 +29,10 @@ const statusColors = {
 };
 
 export function LeadsTable({ leads, onEdit }: LeadsTableProps) {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
   return (
     <div className="rounded-md border">
       <Table>
@@ -35,6 +44,7 @@ export function LeadsTable({ leads, onEdit }: LeadsTableProps) {
             <TableHead>Event</TableHead>
             <TableHead>Facility</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Notes</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -61,6 +71,30 @@ export function LeadsTable({ leads, onEdit }: LeadsTableProps) {
                 >
                   {lead.status}
                 </Badge>
+              </TableCell>
+              <TableCell>
+                <HoverCard>
+                  <HoverCardTrigger asChild>
+                    <Button variant="ghost" size="icon" className="text-custom-slate hover:text-custom-mauve">
+                      <ScrollTextIcon className="h-4 w-4" />
+                    </Button>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-80 bg-custom-white border-custom-light">
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-semibold text-custom-slate">Notes History</h4>
+                      <div className="text-sm text-custom-slate">
+                        <div className="space-y-2">
+                          <div className="border-l-2 border-custom-mauve pl-3">
+                            <p className="text-xs text-custom-gray">
+                              {formatDate(lead.registrationDate)}
+                            </p>
+                            <p className="mt-1">{lead.notes}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
               </TableCell>
               <TableCell>
                 <Button
