@@ -1,13 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { FileUpIcon, Download } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useGym } from "@/contexts/GymContext";
+import { GymSelector } from "@/components/gym/GymSelector";
 
 interface LeadHeaderProps {
   onExport: () => void;
@@ -15,35 +8,11 @@ interface LeadHeaderProps {
 }
 
 export function LeadHeader({ onExport, onImport }: LeadHeaderProps) {
-  const { currentGym, setCurrentGym, gyms } = useGym();
-
   return (
     <div className="flex justify-between items-center">
       <div className="flex flex-col gap-2">
         <h1 className="text-3xl font-bold text-custom-slate">Winter Camp Sales Toolkit</h1>
-        <Select
-          value={currentGym?.id || "all"}
-          onValueChange={(value) => {
-            if (value === "all") {
-              setCurrentGym(null);
-            } else {
-              const gym = gyms.find((g) => g.id === value);
-              if (gym) setCurrentGym(gym);
-            }
-          }}
-        >
-          <SelectTrigger className="w-[280px] bg-white border-[#cec4c1]">
-            <SelectValue placeholder="Select a gym location" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Gyms</SelectItem>
-            {gyms.map((gym) => (
-              <SelectItem key={gym.id} value={gym.id}>
-                {gym.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <GymSelector />
       </div>
       <div className="flex gap-2">
         <Button
