@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
+import { getLeadsByGym, updateLead } from "@/lib/supabase";
 import { StatsCards } from "@/components/StatsCards";
 import { LeadsTable } from "@/components/LeadsTable";
 import { LeadDialog } from "@/components/lead/LeadDialog";
@@ -14,39 +14,27 @@ export default function GymDashboard() {
 
   const { data: leads = [], refetch } = useQuery({
     queryKey: ["leads", gymId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("leads")
-        .select("*")
-        .eq("gymId", gymId)
-        .order("registrationDate", { ascending: false });
-
-      if (error) {
+    queryFn: () => getLeadsByGym(gymId!),
+    meta: {
+      onError: () => {
         toast.error("Failed to load leads");
-        throw error;
       }
-
-      return data as Lead[];
-    },
+    }
   });
 
   const handleSaveLead = async (data: Partial<Lead>) => {
-    const { error } = await supabase
-      .from("leads")
-      .upsert({ ...data, gymId });
-
-    if (error) {
+    try {
+      await updateLead(data.id!, data);
+      toast.success("Lead saved successfully!");
+      refetch();
+    } catch (error) {
       toast.error("Failed to save lead");
-      return;
     }
-
-    toast.success("Lead saved successfully!");
-    refetch();
   };
 
   const filteredLeads = leads.filter((lead) =>
     Object.values(lead).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+      value?.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
 
