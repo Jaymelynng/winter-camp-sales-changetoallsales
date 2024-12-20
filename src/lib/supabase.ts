@@ -1,7 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { Lead, LeadInput } from '@/types/lead';
 
-// Helper functions for gym operations
 export const getGyms = async () => {
   const { data, error } = await supabase
     .from('gyms')
@@ -12,13 +11,14 @@ export const getGyms = async () => {
   return data;
 };
 
-// Helper functions for lead operations
-export const getLeadsByGym = async (gymId: string) => {
-  const { data, error } = await supabase
-    .from('leads')
-    .select('*')
-    .eq('gym_id', gymId)
-    .order('created_at', { ascending: false });
+export const getLeadsByGym = async (gymId?: string | null) => {
+  let query = supabase.from('leads').select('*');
+  
+  if (gymId) {
+    query = query.eq('gym_id', gymId);
+  }
+  
+  const { data, error } = await query.order('created_at', { ascending: false });
   
   if (error) throw error;
   return data as Lead[];

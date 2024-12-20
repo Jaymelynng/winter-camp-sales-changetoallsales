@@ -2,56 +2,17 @@ import { useState } from "react";
 import { LeadsTable } from "@/components/LeadsTable";
 import { StatsCards } from "@/components/StatsCards";
 import { LeadDialog } from "@/components/lead/LeadDialog";
+import { LeadHeader } from "@/components/lead/LeadHeader";
 import { Lead, LeadInput } from "@/types/lead";
-import { Button } from "@/components/ui/button";
-import { FileUpIcon, Download } from "lucide-react";
 import { toast } from "sonner";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { createLead, getLeadsByGym, updateLead } from "@/lib/supabase";
+import { useLeads } from "@/hooks/useLeads";
 import { useGym } from "@/contexts/GymContext";
 
 const Index = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | undefined>();
   const [searchTerm, setSearchTerm] = useState("");
   const { currentGym } = useGym();
-  const queryClient = useQueryClient();
-
-  // Fetch leads data
-  const { data: leads = [], isLoading } = useQuery({
-    queryKey: ["leads", currentGym?.id],
-    queryFn: () => currentGym ? getLeadsByGym(currentGym.id) : Promise.resolve([]),
-    enabled: !!currentGym,
-    meta: {
-      onError: () => {
-        toast.error("Failed to load leads. Please try again.");
-      }
-    }
-  });
-
-  // Create lead mutation
-  const createLeadMutation = useMutation({
-    mutationFn: createLead,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
-      toast.success("Lead created successfully!");
-    },
-    onError: () => {
-      toast.error("Failed to create lead. Please try again.");
-    }
-  });
-
-  // Update lead mutation
-  const updateLeadMutation = useMutation({
-    mutationFn: ({ id, updates }: { id: string; updates: Partial<LeadInput> }) => 
-      updateLead(id, updates),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
-      toast.success("Lead updated successfully!");
-    },
-    onError: () => {
-      toast.error("Failed to update lead. Please try again.");
-    }
-  });
+  const { leads, isLoading, createLead, updateLead } = useLeads();
 
   const filteredLeads = leads.filter((lead) =>
     Object.values(lead).some((value) =>
@@ -61,13 +22,13 @@ const Index = () => {
 
   const handleSaveLead = (data: LeadInput) => {
     if (selectedLead) {
-      updateLeadMutation.mutate({ 
+      updateLead({ 
         id: selectedLead.id, 
         updates: { ...data, gym_id: currentGym?.id } 
       });
       setSelectedLead(undefined);
     } else {
-      createLeadMutation.mutate({ ...data, gym_id: currentGym?.id });
+      createLead({ ...data, gym_id: currentGym?.id });
     }
   };
 
@@ -119,8 +80,7 @@ const Index = () => {
           };
         });
         
-        // Create each lead
-        Promise.all(newLeads.map(lead => createLeadMutation.mutate(lead)))
+        Promise.all(newLeads.map(lead => createLead(lead)))
           .then(() => {
             toast.success("Leads imported successfully!");
           })
@@ -132,54 +92,15 @@ const Index = () => {
     }
   };
 
-  if (!currentGym) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-custom-white">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-custom-slate mb-4">Please select a gym</h1>
-          <p className="text-custom-slate">You need to select a gym to view and manage leads.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="flex h-screen bg-custom-white">
       <div className="flex-1 overflow-auto">
         <div className="container py-10">
           <div className="flex flex-col space-y-8">
-            <div className="flex justify-between items-center">
-              <h1 className="text-3xl font-bold text-custom-slate">Winter Camp Sales Toolkit</h1>
-              <div className="flex gap-2">
-                <div className="flex gap-2">
-                  <Button 
-                    variant="outline" 
-                    className="gap-2 border-custom-light text-custom-slate hover:bg-custom-light/10"
-                    onClick={handleExportLeads}
-                  >
-                    <Download className="w-4 h-4" />
-                    Export Leads
-                  </Button>
-                  <label className="cursor-pointer">
-                    <Button 
-                      variant="outline" 
-                      className="gap-2 border-custom-light text-custom-slate hover:bg-custom-light/10"
-                      onClick={() => document.getElementById('import-leads')?.click()}
-                    >
-                      <FileUpIcon className="w-4 h-4" />
-                      Import Leads
-                    </Button>
-                    <input
-                      id="import-leads"
-                      type="file"
-                      accept=".csv"
-                      className="hidden"
-                      onChange={handleImportLeads}
-                    />
-                  </label>
-                </div>
-              </div>
-            </div>
+            <LeadHeader
+              onExport={handleExportLeads}
+              onImport={handleImportLeads}
+            />
 
             <StatsCards leads={filteredLeads} />
             
@@ -187,7 +108,7 @@ const Index = () => {
               <LeadDialog
                 lead={selectedLead}
                 onSave={handleSaveLead}
-                gymId={currentGym.id}
+                gymId={currentGym?.id}
               />
             </div>
 
