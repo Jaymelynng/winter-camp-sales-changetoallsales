@@ -6,6 +6,8 @@ import { mockLeads } from "@/data/mockLeads";
 import { Lead } from "@/types/lead";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { FileUpIcon } from "lucide-react";
 
 const Index = () => {
   const [leads, setLeads] = useState<Lead[]>(mockLeads);
@@ -31,8 +33,11 @@ const Index = () => {
     <div className="container py-10">
       <div className="flex flex-col space-y-8">
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Leads Management</h1>
-          <LeadDialog onSave={handleSaveLead} />
+          <h1 className="text-3xl font-bold">Winter Camp Sales Toolkit</h1>
+          <Button variant="outline" className="gap-2">
+            <FileUpIcon className="w-4 h-4" />
+            Import Leads
+          </Button>
         </div>
 
         <StatsCards leads={leads} />
@@ -40,7 +45,7 @@ const Index = () => {
         <Tabs defaultValue="leads" className="space-y-4">
           <TabsList>
             <TabsTrigger value="leads">Leads</TabsTrigger>
-            <TabsTrigger value="help">Help & Scripts</TabsTrigger>
+            <TabsTrigger value="toolkit">Sales Toolkit</TabsTrigger>
           </TabsList>
           
           <TabsContent value="leads" className="space-y-4">
@@ -56,23 +61,20 @@ const Index = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="help">
+          <TabsContent value="toolkit">
             <div className="grid gap-4 md:grid-cols-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Follow-up Scripts</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span className="text-purple-600">📝</span>
+                    Quick Scripts
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div>
+                  <div className="bg-gray-50 p-4 rounded-lg">
                     <h4 className="font-semibold mb-2">Initial Contact</h4>
                     <p className="text-sm text-muted-foreground">
-                      "Hi [Name], this is [Your Name] from [Facility]. I noticed you expressed interest in our [Event]. Would you like to learn more about our programs?"
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Follow-up</h4>
-                    <p className="text-sm text-muted-foreground">
-                      "Hello [Name], I'm following up about [Event]. We have limited spots available and I wanted to ensure you have all the information you need to make a decision."
+                      "Hi [Parent Name], I noticed [Child Name] had a great time at our Thanksgiving Camp! We're offering a special 15% discount on Winter Camp enrollment..."
                     </p>
                   </div>
                 </CardContent>
@@ -80,24 +82,18 @@ const Index = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Best Practices</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <span className="text-purple-600">📧</span>
+                    Email Templates
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Response Time</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Aim to respond to new leads within 24 hours. Quick response times significantly increase conversion rates.
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Follow-up Schedule</h4>
-                    <p className="text-sm text-muted-foreground">
-                      - Day 1: Initial contact
-                      - Day 3: First follow-up
-                      - Day 7: Second follow-up
-                      - Day 14: Final follow-up
-                    </p>
-                  </div>
+                  <Button className="w-full" variant="secondary">
+                    Send Winter Camp Info
+                  </Button>
+                  <Button className="w-full" variant="outline">
+                    Send Discount Offer
+                  </Button>
                 </CardContent>
               </Card>
             </div>

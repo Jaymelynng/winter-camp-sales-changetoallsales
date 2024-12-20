@@ -1,62 +1,89 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Lead } from "@/types/lead";
+import { PhoneIcon, TrendingUpIcon, FlameIcon, TrophyIcon } from "lucide-react";
 
 interface StatsCardsProps {
   leads: Lead[];
 }
 
 export function StatsCards({ leads }: StatsCardsProps) {
-  const totalLeads = leads.length;
-  const newLeads = leads.filter((lead) => lead.status === "new").length;
-  const convertedLeads = leads.filter(
-    (lead) => lead.status === "converted"
-  ).length;
-  const conversionRate = totalLeads
-    ? ((convertedLeads / totalLeads) * 100).toFixed(1)
-    : "0";
+  const followUps = leads.filter((lead) => lead.status === "contacted").length;
+  const convertedLeads = leads.filter((lead) => lead.status === "converted").length;
+  const hotLeads = leads.filter((lead) => lead.status === "new").length;
+  const recentWins = convertedLeads;
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">Total Leads</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{totalLeads}</div>
-        </CardContent>
+    <div className="grid gap-4 md:grid-cols-4">
+      <Card className="p-6 bg-blue-50">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <PhoneIcon className="w-6 h-6 text-blue-600" />
+          </div>
+          <div>
+            <p className="text-blue-600 font-medium">Follow-ups</p>
+            <div className="flex items-baseline gap-1">
+              <h3 className="text-2xl font-bold">{followUps}</h3>
+              <p className="text-sm text-muted-foreground">Today!</p>
+            </div>
+          </div>
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Every call brings kids closer to Winter Camp fun!
+        </p>
       </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">New Leads</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{newLeads}</div>
-        </CardContent>
+
+      <Card className="p-6 bg-green-50">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-green-100 rounded-lg">
+            <TrendingUpIcon className="w-6 h-6 text-green-600" />
+          </div>
+          <div>
+            <p className="text-green-600 font-medium">Conversions</p>
+            <div className="flex items-baseline gap-1">
+              <h3 className="text-2xl font-bold">{convertedLeads}%</h3>
+              <p className="text-sm text-muted-foreground">to Goal</p>
+            </div>
+          </div>
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Keep the momentum going!
+        </p>
       </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            Converted Leads
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{convertedLeads}</div>
-        </CardContent>
+
+      <Card className="p-6 bg-red-50">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-red-100 rounded-lg">
+            <FlameIcon className="w-6 h-6 text-red-600" />
+          </div>
+          <div>
+            <p className="text-red-600 font-medium">Hot Leads</p>
+            <div className="flex items-baseline gap-1">
+              <h3 className="text-2xl font-bold">{hotLeads}</h3>
+              <p className="text-sm text-muted-foreground">Ready!</p>
+            </div>
+          </div>
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Strike while the iron is hot!
+        </p>
       </Card>
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">
-            Conversion Rate
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">{conversionRate}%</div>
-        </CardContent>
+
+      <Card className="p-6 bg-purple-50">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-purple-100 rounded-lg">
+            <TrophyIcon className="w-6 h-6 text-purple-600" />
+          </div>
+          <div>
+            <p className="text-purple-600 font-medium">Recent Wins</p>
+            <div className="flex items-baseline gap-1">
+              <h3 className="text-2xl font-bold">{recentWins}</h3>
+              <p className="text-sm text-muted-foreground">Families Today!</p>
+            </div>
+          </div>
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Amazing work! Keep closing!
+        </p>
       </Card>
     </div>
   );
