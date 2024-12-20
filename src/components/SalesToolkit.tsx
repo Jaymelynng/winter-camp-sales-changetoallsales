@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { QuickScripts } from "./toolkit/QuickScripts";
 import { CommonQuestions } from "./toolkit/CommonQuestions";
 import { cn } from "@/lib/utils";
 import { Lead } from "@/types/lead";
@@ -19,7 +18,6 @@ export const SalesToolkit = () => {
     >
       <div className="space-y-4">
         <ToolkitHeader isExpanded={isExpanded} setIsExpanded={setIsExpanded} />
-        <QuickScripts />
         <CommonQuestions />
         <SalesIdeas />
       </div>
