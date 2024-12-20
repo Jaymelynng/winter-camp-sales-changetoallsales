@@ -7,6 +7,7 @@ import { Lead, LeadInput } from "@/types/lead";
 import { toast } from "sonner";
 import { useLeads } from "@/hooks/useLeads";
 import { useGym } from "@/contexts/GymContext";
+import { GymSelector } from "@/components/gym/GymSelector";
 
 const Index = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | undefined>();
@@ -21,14 +22,19 @@ const Index = () => {
   );
 
   const handleSaveLead = (data: LeadInput) => {
+    if (!currentGym) {
+      toast.error("Please select a gym first");
+      return;
+    }
+
     if (selectedLead) {
       updateLead({ 
         id: selectedLead.id, 
-        updates: { ...data, gym_id: currentGym?.id } 
+        updates: { ...data, gym_id: currentGym.id } 
       });
       setSelectedLead(undefined);
     } else {
-      createLead({ ...data, gym_id: currentGym?.id });
+      createLead({ ...data, gym_id: currentGym.id });
     }
   };
 
@@ -51,7 +57,7 @@ const Index = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "leads.csv");
+    link.setAttribute("download", `leads-${currentGym?.name || 'all'}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -59,6 +65,11 @@ const Index = () => {
   };
 
   const handleImportLeads = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!currentGym) {
+      toast.error("Please select a gym first");
+      return;
+    }
+
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -76,7 +87,7 @@ const Index = () => {
             facility: values[5] || "",
             status: (values[6] as Lead["status"]) || "new",
             notes: "",
-            gym_id: currentGym?.id
+            gym_id: currentGym.id
           };
         });
         
@@ -93,18 +104,12 @@ const Index = () => {
   };
 
   return (
-    <div className="flex h-screen bg-custom-white">
+    <div className="flex h-screen bg-[#f9fafb]">
       <div className="flex-1 overflow-auto">
         <div className="container py-10">
           <div className="flex flex-col space-y-8">
-            <LeadHeader
-              onExport={handleExportLeads}
-              onImport={handleImportLeads}
-            />
-
-            <StatsCards leads={filteredLeads} />
-            
             <div className="flex justify-between items-center">
+              <GymSelector />
               <LeadDialog
                 lead={selectedLead}
                 onSave={handleSaveLead}
@@ -112,9 +117,16 @@ const Index = () => {
               />
             </div>
 
+            <LeadHeader
+              onExport={handleExportLeads}
+              onImport={handleImportLeads}
+            />
+
+            <StatsCards leads={filteredLeads} />
+
             {isLoading ? (
               <div className="flex justify-center items-center h-64">
-                <p className="text-custom-slate">Loading leads...</p>
+                <p className="text-[#8f93a0]">Loading leads...</p>
               </div>
             ) : (
               <LeadsTable
