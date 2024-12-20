@@ -15,6 +15,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { RichTextEditor } from "./RichTextEditor";
 
 interface LeadsTableProps {
   leads: Lead[];
@@ -79,6 +80,7 @@ export function LeadsTable({ leads, onEdit }: LeadsTableProps) {
                       <ScrollTextIcon className="h-4 w-4" />
                     </Button>
                   </HoverCardTrigger>
+
                   <HoverCardContent className="w-80 bg-custom-white border-custom-light">
                     <div className="space-y-2">
                       <h4 className="text-sm font-semibold text-custom-slate">Notes History</h4>
@@ -88,12 +90,17 @@ export function LeadsTable({ leads, onEdit }: LeadsTableProps) {
                             <p className="text-xs text-custom-gray">
                               {formatDate(lead.registrationDate)}
                             </p>
-                            <p className="mt-1">{lead.notes}</p>
+                            <RichTextEditor
+                              content={lead.notes}
+                              onChange={() => {}}
+                              editable={false}
+                            />
                           </div>
                         </div>
                       </div>
                     </div>
                   </HoverCardContent>
+
                 </HoverCard>
               </TableCell>
               <TableCell>

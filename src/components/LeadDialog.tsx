@@ -29,6 +29,7 @@ import { PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "sonner";
+import { RichTextEditor } from "./RichTextEditor";
 
 const formSchema = z.object({
   fullName: z.string().min(2, "Name is required"),
@@ -193,7 +194,10 @@ export function LeadDialog({ lead, onSave }: LeadDialogProps) {
                 <FormItem>
                   <FormLabel>Notes</FormLabel>
                   <FormControl>
-                    <Textarea {...field} />
+                    <RichTextEditor
+                      content={field.value}
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
