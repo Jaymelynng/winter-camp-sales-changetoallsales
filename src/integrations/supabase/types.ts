@@ -32,13 +32,15 @@ export type Database = {
       }
       leads: {
         Row: {
+          child_name: string | null
           created_at: string
           email: string
           event: string
           facility: string
-          full_name: string
           gym_id: string | null
           id: string
+          lead_source: string | null
+          lead_temperature: string | null
           notes: string | null
           parent_name: string
           phone: string
@@ -46,13 +48,15 @@ export type Database = {
           status: string | null
         }
         Insert: {
+          child_name?: string | null
           created_at?: string
           email: string
           event: string
           facility: string
-          full_name: string
           gym_id?: string | null
           id?: string
+          lead_source?: string | null
+          lead_temperature?: string | null
           notes?: string | null
           parent_name: string
           phone: string
@@ -60,13 +64,15 @@ export type Database = {
           status?: string | null
         }
         Update: {
+          child_name?: string | null
           created_at?: string
           email?: string
           event?: string
           facility?: string
-          full_name?: string
           gym_id?: string | null
           id?: string
+          lead_source?: string | null
+          lead_temperature?: string | null
           notes?: string | null
           parent_name?: string
           phone?: string

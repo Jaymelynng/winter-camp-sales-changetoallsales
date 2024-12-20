@@ -27,11 +27,17 @@ const statusColors = {
   lost: "bg-red-500",
 };
 
+const temperatureColors = {
+  cold: "bg-blue-200",
+  warm: "bg-yellow-200",
+  hot: "bg-red-200",
+};
+
 export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsTableProps) {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Lead;
     direction: "asc" | "desc";
-  }>({ key: "full_name", direction: "asc" });
+  }>({ key: "parent_name", direction: "asc" });
   
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -66,11 +72,13 @@ export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsT
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Full Name</TableHead>
-              <TableHead>Parent/Guardian</TableHead>
+              <TableHead>Parent Name</TableHead>
+              <TableHead>Child Name</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead>Event</TableHead>
               <TableHead>Facility</TableHead>
+              <TableHead>Source</TableHead>
+              <TableHead>Temperature</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -82,8 +90,8 @@ export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsT
                 className={selectedLead?.id === lead.id ? "bg-custom-light/20" : ""}
                 onClick={() => setSelectedLead(lead)}
               >
-                <TableCell className="font-medium">{lead.full_name}</TableCell>
-                <TableCell>{lead.parent_name}</TableCell>
+                <TableCell className="font-medium">{lead.parent_name}</TableCell>
+                <TableCell>{lead.child_name}</TableCell>
                 <TableCell>
                   <div className="flex flex-col">
                     <span>{lead.phone}</span>
@@ -94,6 +102,16 @@ export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsT
                 </TableCell>
                 <TableCell>{lead.event}</TableCell>
                 <TableCell>{lead.facility}</TableCell>
+                <TableCell>{lead.lead_source}</TableCell>
+                <TableCell>
+                  <Badge
+                    className={`${
+                      temperatureColors[lead.lead_temperature]
+                    } text-gray-700 capitalize`}
+                  >
+                    {lead.lead_temperature}
+                  </Badge>
+                </TableCell>
                 <TableCell>
                   <Badge
                     className={`${

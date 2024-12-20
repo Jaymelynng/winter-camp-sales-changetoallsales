@@ -6,14 +6,16 @@ import { UseFormReturn } from "react-hook-form";
 import * as z from "zod";
 
 export const formSchema = z.object({
-  full_name: z.string().min(2, "Name is required"),
   parent_name: z.string().min(2, "Parent name is required"),
+  child_name: z.string().optional(),
   phone: z.string().min(10, "Valid phone number is required"),
   email: z.string().email("Valid email is required"),
   event: z.string().min(2, "Event is required"),
   facility: z.string().min(2, "Facility is required"),
   notes: z.string(),
   status: z.enum(["new", "contacted", "converted", "lost"]),
+  lead_source: z.string().optional(),
+  lead_temperature: z.enum(["cold", "warm", "hot"]),
   gym_id: z.string().uuid().nullable(),
 });
 
@@ -28,10 +30,10 @@ export function LeadFormFields({ form }: LeadFormFieldsProps) {
     <>
       <FormField
         control={form.control}
-        name="full_name"
+        name="parent_name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Full Name</FormLabel>
+            <FormLabel>Parent/Guardian Name</FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -41,10 +43,10 @@ export function LeadFormFields({ form }: LeadFormFieldsProps) {
       />
       <FormField
         control={form.control}
-        name="parent_name"
+        name="child_name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Parent/Guardian Name</FormLabel>
+            <FormLabel>Child Name</FormLabel>
             <FormControl>
               <Input {...field} />
             </FormControl>
@@ -100,6 +102,41 @@ export function LeadFormFields({ form }: LeadFormFieldsProps) {
             <FormControl>
               <Input {...field} />
             </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="lead_source"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Lead Source</FormLabel>
+            <FormControl>
+              <Input {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+      <FormField
+        control={form.control}
+        name="lead_temperature"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Lead Temperature</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select temperature" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="cold">Cold</SelectItem>
+                <SelectItem value="warm">Warm</SelectItem>
+                <SelectItem value="hot">Hot</SelectItem>
+              </SelectContent>
+            </Select>
             <FormMessage />
           </FormItem>
         )}
