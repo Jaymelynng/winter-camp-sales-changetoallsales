@@ -7,10 +7,16 @@ interface StatsCardsProps {
 }
 
 export function StatsCards({ leads }: StatsCardsProps) {
+  // Calculate stats based on lead statuses
   const followUps = leads.filter((lead) => lead.status === "contacted").length;
+  const totalLeads = leads.length;
   const convertedLeads = leads.filter((lead) => lead.status === "converted").length;
+  const conversionRate = totalLeads > 0 ? Math.round((convertedLeads / totalLeads) * 100) : 0;
   const hotLeads = leads.filter((lead) => lead.status === "new").length;
-  const recentWins = convertedLeads;
+  const recentWins = leads.filter((lead) => 
+    lead.status === "converted" && 
+    new Date(lead.registrationDate).toDateString() === new Date().toDateString()
+  ).length;
 
   return (
     <div className="grid gap-4 md:grid-cols-4">
@@ -40,7 +46,7 @@ export function StatsCards({ leads }: StatsCardsProps) {
           <div>
             <p className="text-green-600 font-medium">Conversions</p>
             <div className="flex items-baseline gap-1">
-              <h3 className="text-2xl font-bold">{convertedLeads}%</h3>
+              <h3 className="text-2xl font-bold">{conversionRate}%</h3>
               <p className="text-sm text-muted-foreground">to Goal</p>
             </div>
           </div>
@@ -77,7 +83,7 @@ export function StatsCards({ leads }: StatsCardsProps) {
             <p className="text-purple-600 font-medium">Recent Wins</p>
             <div className="flex items-baseline gap-1">
               <h3 className="text-2xl font-bold">{recentWins}</h3>
-              <p className="text-sm text-muted-foreground">Families Today!</p>
+              <p className="text-sm text-muted-foreground">Today!</p>
             </div>
           </div>
         </div>
