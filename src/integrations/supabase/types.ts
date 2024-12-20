@@ -9,6 +9,38 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      faqs: {
+        Row: {
+          answer: string
+          created_at: string
+          gym_id: string | null
+          id: string
+          question: string
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          gym_id?: string | null
+          id?: string
+          question: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          gym_id?: string | null
+          id?: string
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "faqs_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gyms: {
         Row: {
           created_at: string
@@ -79,6 +111,41 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "leads_gym_id_fkey"
+            columns: ["gym_id"]
+            isOneToOne: false
+            referencedRelation: "gyms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scripts: {
+        Row: {
+          content: string
+          created_at: string
+          gym_id: string | null
+          id: string
+          script_type: string
+          title: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          gym_id?: string | null
+          id?: string
+          script_type: string
+          title: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          gym_id?: string | null
+          id?: string
+          script_type?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scripts_gym_id_fkey"
             columns: ["gym_id"]
             isOneToOne: false
             referencedRelation: "gyms"

@@ -21,13 +21,17 @@ export function FaqSection() {
   ];
 
   return (
-    <Accordion type="single" collapsible className="w-full">
+    <Accordion type="single" collapsible className="space-y-2">
       {faqs.map((faq, index) => (
-        <AccordionItem key={index} value={`item-${index}`}>
-          <AccordionTrigger className="text-[#8f93a0]">
+        <AccordionItem 
+          key={index} 
+          value={`item-${index}`}
+          className="border border-[#cec4c1] rounded-lg bg-[#f9fafb] overflow-hidden"
+        >
+          <AccordionTrigger className="px-4 py-3 text-[#b48f8f] hover:bg-[#cec4c1]/10">
             {faq.question}
           </AccordionTrigger>
-          <AccordionContent className="text-[#8f93a0]">
+          <AccordionContent className="px-4 py-3 text-[#8f93a0] bg-white">
             {faq.answer}
           </AccordionContent>
         </AccordionItem>
