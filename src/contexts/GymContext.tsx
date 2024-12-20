@@ -27,9 +27,11 @@ export function GymProvider({ children }: { children: ReactNode }) {
   const { data: gyms = [], isLoading } = useQuery({
     queryKey: ["gyms"],
     queryFn: getGyms,
-    onError: () => {
-      toast.error("Failed to load gyms");
-    },
+    meta: {
+      onError: () => {
+        toast.error("Failed to load gyms");
+      }
+    }
   });
 
   useEffect(() => {
