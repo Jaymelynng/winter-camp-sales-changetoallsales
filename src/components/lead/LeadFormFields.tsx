@@ -14,6 +14,7 @@ export const formSchema = z.object({
   facility: z.string().min(2, "Facility is required"),
   notes: z.string(),
   status: z.enum(["new", "contacted", "converted", "lost"]),
+  gym_id: z.string().uuid().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;

@@ -18,9 +18,10 @@ import * as z from "zod";
 interface LeadDialogProps {
   lead?: Lead;
   onSave: (data: LeadInput) => void;
+  gymId?: string;
 }
 
-export function LeadDialog({ lead, onSave }: LeadDialogProps) {
+export function LeadDialog({ lead, onSave, gymId }: LeadDialogProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: lead || {
@@ -32,11 +33,15 @@ export function LeadDialog({ lead, onSave }: LeadDialogProps) {
       facility: "",
       notes: "",
       status: "new",
+      gym_id: gymId || null,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    onSave(values);
+    onSave({
+      ...values,
+      gym_id: values.gym_id || null,
+    });
     toast.success("Lead saved successfully!");
   }
 
