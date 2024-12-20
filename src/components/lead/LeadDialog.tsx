@@ -1,19 +1,14 @@
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
 import { Lead, LeadInput } from "@/types/lead";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { LeadFormFields, formSchema } from "./LeadFormFields";
+import { LeadDialogHeader } from "./LeadDialogHeader";
+import { LeadDialogTrigger } from "./LeadDialogTrigger";
 import * as z from "zod";
+import { Button } from "../ui/button";
 
 interface LeadDialogProps {
   lead?: Lead;
@@ -55,18 +50,9 @@ export function LeadDialog({ lead, onSave, gymId }: LeadDialogProps) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button className="ml-auto">
-          <PlusIcon className="mr-2 h-4 w-4" />
-          Add Lead
-        </Button>
-      </DialogTrigger>
+      <LeadDialogTrigger />
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>
-            {lead ? "Edit Lead" : "Add New Lead"}
-          </DialogTitle>
-        </DialogHeader>
+        <LeadDialogHeader lead={lead} />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <LeadFormFields form={form} />
