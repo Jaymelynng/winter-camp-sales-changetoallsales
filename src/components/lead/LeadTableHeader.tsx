@@ -1,11 +1,12 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, ArrowUpDown } from "lucide-react";
+import { Lead } from "@/types/lead";
 
 interface LeadTableHeaderProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  onSort: (column: string) => void;
+  onSort: (column: keyof Lead) => void;
 }
 
 export function LeadTableHeader({ searchTerm, onSearchChange, onSort }: LeadTableHeaderProps) {

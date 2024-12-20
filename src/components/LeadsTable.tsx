@@ -22,6 +22,8 @@ import { useState } from "react";
 interface LeadsTableProps {
   leads: Lead[];
   onEdit: (lead: Lead) => void;
+  searchTerm: string;
+  onSearchChange: (term: string) => void;
 }
 
 const statusColors = {
@@ -31,8 +33,7 @@ const statusColors = {
   lost: "bg-red-500",
 };
 
-export function LeadsTable({ leads, onEdit }: LeadsTableProps) {
-  const [searchTerm, setSearchTerm] = useState("");
+export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsTableProps) {
   const [sortConfig, setSortConfig] = useState<{
     key: keyof Lead;
     direction: "asc" | "desc";
@@ -52,25 +53,19 @@ export function LeadsTable({ leads, onEdit }: LeadsTableProps) {
     });
   };
 
-  const filteredAndSortedLeads = leads
-    .filter((lead) =>
-      Object.values(lead).some((value) =>
-        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    )
-    .sort((a, b) => {
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
-      if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
-      if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
-      return 0;
-    });
+  const sortedLeads = [...leads].sort((a, b) => {
+    const aValue = a[sortConfig.key];
+    const bValue = b[sortConfig.key];
+    if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+    return 0;
+  });
 
   return (
     <div className="space-y-4">
       <LeadTableHeader
         searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
+        onSearchChange={onSearchChange}
         onSort={handleSort}
       />
       
@@ -89,7 +84,7 @@ export function LeadsTable({ leads, onEdit }: LeadsTableProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredAndSortedLeads.map((lead) => (
+            {sortedLeads.map((lead) => (
               <TableRow key={lead.id}>
                 <TableCell className="font-medium">{lead.fullName}</TableCell>
                 <TableCell>{lead.parentName}</TableCell>
