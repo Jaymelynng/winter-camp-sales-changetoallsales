@@ -7,7 +7,6 @@ import { Lead, LeadInput } from "@/types/lead";
 import { toast } from "sonner";
 import { useLeads } from "@/hooks/useLeads";
 import { useGym } from "@/contexts/GymContext";
-import { GymSelector } from "@/components/gym/GymSelector";
 
 const Index = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | undefined>();
@@ -64,52 +63,12 @@ const Index = () => {
     toast.success("Leads exported successfully!");
   };
 
-  const handleImportLeads = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!currentGym) {
-      toast.error("Please select a gym first");
-      return;
-    }
-
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const text = e.target?.result as string;
-        const [headers, ...rows] = text.split("\n");
-        const newLeads = rows.map((row) => {
-          const values = row.split(",");
-          return {
-            full_name: values[0] || "",
-            parent_name: values[1] || "",
-            phone: values[2] || "",
-            email: values[3] || "",
-            event: values[4] || "",
-            facility: values[5] || "",
-            status: (values[6] as Lead["status"]) || "new",
-            notes: "",
-            gym_id: currentGym.id
-          };
-        });
-        
-        Promise.all(newLeads.map(lead => createLead(lead)))
-          .then(() => {
-            toast.success("Leads imported successfully!");
-          })
-          .catch(() => {
-            toast.error("Failed to import some leads. Please try again.");
-          });
-      };
-      reader.readAsText(file);
-    }
-  };
-
   return (
     <div className="flex h-screen bg-[#f9fafb]">
       <div className="flex-1 overflow-auto">
         <div className="container py-10">
           <div className="flex flex-col space-y-8">
             <div className="flex justify-between items-center">
-              <GymSelector />
               <LeadDialog
                 lead={selectedLead}
                 onSave={handleSaveLead}
@@ -119,7 +78,6 @@ const Index = () => {
 
             <LeadHeader
               onExport={handleExportLeads}
-              onImport={handleImportLeads}
             />
 
             <StatsCards leads={filteredLeads} />
