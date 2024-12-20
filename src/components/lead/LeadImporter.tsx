@@ -124,13 +124,13 @@ export function LeadImporter() {
           child_name: values[1] || "",
           phone: values[2] || "",
           email: values[3] || "",
-          event: values[4] || "",
           facility: normalizeGymName(values[5] || ""),
           status: (values[6]?.toLowerCase() as Lead["status"]) || "new",
           notes: "",
           lead_source: "",
           lead_temperature: "warm",
-          gym_id: currentGym.id
+          gym_id: currentGym.id,
+          registration_date: new Date().toISOString()
         };
 
         // Basic validation
