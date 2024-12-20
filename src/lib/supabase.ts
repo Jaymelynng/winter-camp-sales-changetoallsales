@@ -1,9 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = 'https://tsodwnsbnldnncyxozre.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRzb2R3bnNibmxkbm5jeXhvenJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ2ODgzOTgsImV4cCI6MjA1MDI2NDM5OH0.Xv2QnTpRy8pAXpIcpa9myXC0Z_sXbyFSORgvttWaxD0';
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
+import { supabase } from '@/integrations/supabase/client';
 
 // Helper functions for gym operations
 export const getGyms = async () => {
