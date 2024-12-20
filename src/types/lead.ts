@@ -12,3 +12,5 @@ export interface Lead {
   registration_date: string;
   created_at: string;
 }
+
+export type LeadInput = Omit<Lead, 'id' | 'created_at' | 'registration_date'>;

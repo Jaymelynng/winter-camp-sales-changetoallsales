@@ -1,5 +1,5 @@
 import { supabase } from '@/integrations/supabase/client';
-import { Lead } from '@/types/lead';
+import { Lead, LeadInput } from '@/types/lead';
 
 // Helper functions for gym operations
 export const getGyms = async () => {
@@ -24,7 +24,7 @@ export const getLeadsByGym = async (gymId: string) => {
   return data as Lead[];
 };
 
-export const createLead = async (lead: Partial<Lead>) => {
+export const createLead = async (lead: LeadInput) => {
   const { data, error } = await supabase
     .from('leads')
     .insert([lead])
@@ -32,10 +32,10 @@ export const createLead = async (lead: Partial<Lead>) => {
     .single();
   
   if (error) throw error;
-  return data;
+  return data as Lead;
 };
 
-export const updateLead = async (id: string, updates: Partial<Lead>) => {
+export const updateLead = async (id: string, updates: Partial<LeadInput>) => {
   const { data, error } = await supabase
     .from('leads')
     .update(updates)
@@ -44,5 +44,15 @@ export const updateLead = async (id: string, updates: Partial<Lead>) => {
     .single();
   
   if (error) throw error;
-  return data;
+  return data as Lead;
+};
+
+export const importLeads = async (leads: LeadInput[]) => {
+  const { data, error } = await supabase
+    .from('leads')
+    .insert(leads)
+    .select();
+  
+  if (error) throw error;
+  return data as Lead[];
 };

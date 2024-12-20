@@ -5,9 +5,9 @@ import { RichTextEditor } from "../RichTextEditor";
 import { UseFormReturn } from "react-hook-form";
 import * as z from "zod";
 
-const formSchema = z.object({
-  fullName: z.string().min(2, "Name is required"),
-  parentName: z.string().min(2, "Parent name is required"),
+export const formSchema = z.object({
+  full_name: z.string().min(2, "Name is required"),
+  parent_name: z.string().min(2, "Parent name is required"),
   phone: z.string().min(10, "Valid phone number is required"),
   email: z.string().email("Valid email is required"),
   event: z.string().min(2, "Event is required"),
@@ -27,7 +27,7 @@ export function LeadFormFields({ form }: LeadFormFieldsProps) {
     <>
       <FormField
         control={form.control}
-        name="fullName"
+        name="full_name"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Full Name</FormLabel>
@@ -40,7 +40,7 @@ export function LeadFormFields({ form }: LeadFormFieldsProps) {
       />
       <FormField
         control={form.control}
-        name="parentName"
+        name="parent_name"
         render={({ field }) => (
           <FormItem>
             <FormLabel>Parent/Guardian Name</FormLabel>
@@ -142,5 +142,3 @@ export function LeadFormFields({ form }: LeadFormFieldsProps) {
     </>
   );
 }
-
-export { formSchema };

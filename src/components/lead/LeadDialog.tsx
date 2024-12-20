@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form } from "@/components/ui/form";
-import { Lead } from "@/types/lead";
+import { Lead, LeadInput } from "@/types/lead";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -17,15 +17,15 @@ import * as z from "zod";
 
 interface LeadDialogProps {
   lead?: Lead;
-  onSave: (data: any) => void;
+  onSave: (data: LeadInput) => void;
 }
 
 export function LeadDialog({ lead, onSave }: LeadDialogProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: lead || {
-      fullName: "",
-      parentName: "",
+      full_name: "",
+      parent_name: "",
       phone: "",
       email: "",
       event: "",
