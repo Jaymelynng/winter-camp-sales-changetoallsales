@@ -9,6 +9,8 @@ import { useLeads } from "@/hooks/useLeads";
 import { useGym } from "@/contexts/GymContext";
 import { SalesToolkit } from "@/components/toolkit/SalesToolkit";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card } from "@/components/ui/card";
 
 const Index = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | undefined>();
@@ -68,11 +70,12 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-custom-light/10">
-      <div className="px-4 md:px-8">
-        <div className="py-6 md:py-10 max-w-[1400px] mx-auto">
-          <div className="flex flex-col space-y-6 md:space-y-8">
-            <div className="flex justify-between items-center">
+    <ScrollArea className="h-screen">
+      <div className="min-h-screen bg-[#f9fafb]">
+        <div className="px-4 md:px-8 py-6 md:py-10 max-w-[1400px] mx-auto">
+          <div className="space-y-6 md:space-y-8">
+            {/* Header Section */}
+            <div className="flex items-center justify-between">
               <LeadDialog
                 lead={selectedLead}
                 onSave={handleSaveLead}
@@ -81,42 +84,47 @@ const Index = () => {
               <Button
                 variant="outline"
                 onClick={() => setShowToolkit(!showToolkit)}
-                className="bg-white hover:bg-custom-light/20"
+                className="bg-white border-[#cec4c1] text-[#8f93a0] hover:bg-[#cec4c1]/10"
               >
-                {showToolkit ? "Hide Toolkit" : "Show Toolkit"}
+                {showToolkit ? "Hide Sales Tools" : "Show Sales Tools"}
               </Button>
             </div>
 
+            {/* Main Header with Gym Selector */}
             <LeadHeader onExport={handleExportLeads} />
 
+            {/* Stats Cards */}
             <StatsCards leads={filteredLeads} />
 
-            {/* Horizontal Sales Toolkit */}
-            {showToolkit && (
-              <div className="bg-white rounded-lg shadow-md border border-custom-light">
-                <div className="p-4">
-                  <h3 className="text-sm font-medium text-custom-slate mb-4">Sales Toolkit</h3>
-                  <SalesToolkit />
-                </div>
-              </div>
-            )}
+            {/* Main Content Area */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {/* Leads Table Section */}
+              <Card className="lg:col-span-2 xl:col-span-3 bg-white p-6 border border-[#cec4c1]">
+                {isLoading ? (
+                  <div className="flex justify-center items-center h-64">
+                    <p className="text-[#8f93a0]">Loading leads...</p>
+                  </div>
+                ) : (
+                  <LeadsTable
+                    leads={filteredLeads}
+                    onEdit={setSelectedLead}
+                    searchTerm={searchTerm}
+                    onSearchChange={setSearchTerm}
+                  />
+                )}
+              </Card>
 
-            {isLoading ? (
-              <div className="flex justify-center items-center h-64">
-                <p className="text-[#8f93a0]">Loading leads...</p>
-              </div>
-            ) : (
-              <LeadsTable
-                leads={filteredLeads}
-                onEdit={setSelectedLead}
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-              />
-            )}
+              {/* Sales Toolkit Section */}
+              {showToolkit && (
+                <Card className="lg:col-span-1 bg-white border border-[#cec4c1] p-6">
+                  <SalesToolkit />
+                </Card>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ScrollArea>
   );
 };
 
