@@ -9,15 +9,10 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { PencilIcon, ScrollTextIcon } from "lucide-react";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
+import { PencilIcon } from "lucide-react";
 import { RichTextEditor } from "./RichTextEditor";
 import { LeadTableHeader } from "./lead/LeadTableHeader";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { ScrollArea } from "./ui/scroll-area";
 
 interface LeadsTableProps {
@@ -85,13 +80,16 @@ export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsT
                 <TableHead>Event</TableHead>
                 <TableHead>Facility</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Notes</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sortedLeads.map((lead) => (
-                <TableRow key={lead.id}>
+                <TableRow 
+                  key={lead.id}
+                  className={selectedLead?.id === lead.id ? "bg-custom-light/20" : ""}
+                  onClick={() => setSelectedLead(lead)}
+                >
                   <TableCell className="font-medium">{lead.fullName}</TableCell>
                   <TableCell>{lead.parentName}</TableCell>
                   <TableCell>
@@ -114,43 +112,13 @@ export function LeadsTable({ leads, onEdit, searchTerm, onSearchChange }: LeadsT
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <HoverCard>
-                      <HoverCardTrigger asChild>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          className="text-custom-slate hover:text-custom-mauve"
-                          onClick={() => setSelectedLead(lead)}
-                        >
-                          <ScrollTextIcon className="h-4 w-4" />
-                        </Button>
-                      </HoverCardTrigger>
-                      <HoverCardContent className="w-96 bg-custom-white border-custom-light">
-                        <div className="space-y-2">
-                          <h4 className="text-sm font-semibold text-custom-slate">Notes History</h4>
-                          <div className="text-sm text-custom-slate">
-                            <div className="space-y-2">
-                              <div className="border-l-2 border-custom-mauve pl-3">
-                                <p className="text-xs text-custom-gray">
-                                  {formatDate(lead.registrationDate)}
-                                </p>
-                                <RichTextEditor
-                                  content={lead.notes}
-                                  onChange={() => {}}
-                                  editable={false}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </HoverCardContent>
-                    </HoverCard>
-                  </TableCell>
-                  <TableCell>
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => onEdit(lead)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEdit(lead);
+                      }}
                     >
                       <PencilIcon className="h-4 w-4" />
                     </Button>
