@@ -20,26 +20,85 @@ export function LeadImporter() {
   const [pastedData, setPastedData] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Gym name mapping to handle incorrect names
+  // Enhanced gym name mapping to handle incorrect names
   const gymNameMap: { [key: string]: string } = {
-    // Add common misspellings or variations
+    // LA Fitness variations
     "LA fitness": "LA Fitness",
     "lafitness": "LA Fitness",
+    "la fit": "LA Fitness",
+    "la-fitness": "LA Fitness",
+    "l.a. fitness": "LA Fitness",
+    "l.a fitness": "LA Fitness",
+    "la.fitness": "LA Fitness",
+    
+    // Planet Fitness variations
     "Planet fitness": "Planet Fitness",
     "planetfitness": "Planet Fitness",
+    "planet fit": "Planet Fitness",
+    "pf": "Planet Fitness",
+    "planet-fitness": "Planet Fitness",
+    
+    // 24 Hour Fitness variations
     "24hr": "24 Hour Fitness",
     "24 hr fitness": "24 Hour Fitness",
-    // Add more mappings as needed
+    "24hour": "24 Hour Fitness",
+    "24 hour": "24 Hour Fitness",
+    "24-hour fitness": "24 Hour Fitness",
+    "24hr fitness": "24 Hour Fitness",
+    "twenty four hour fitness": "24 Hour Fitness",
+    
+    // Crunch Fitness variations
+    "crunch": "Crunch Fitness",
+    "crunch fit": "Crunch Fitness",
+    "crunchfitness": "Crunch Fitness",
+    "crunch-fitness": "Crunch Fitness",
+    
+    // Anytime Fitness variations
+    "anytime": "Anytime Fitness",
+    "any time": "Anytime Fitness",
+    "anytime fit": "Anytime Fitness",
+    "anytimefitness": "Anytime Fitness",
+    "anytime-fitness": "Anytime Fitness",
+    
+    // Gold's Gym variations
+    "golds": "Gold's Gym",
+    "golds gym": "Gold's Gym",
+    "gold gym": "Gold's Gym",
+    "goldsgym": "Gold's Gym",
+    "golds-gym": "Gold's Gym",
   };
 
   const normalizeGymName = (name: string): string => {
-    const lowercaseName = name.toLowerCase();
+    const lowercaseName = name.toLowerCase().trim();
+    
+    // First try exact match
+    for (const [key, value] of Object.entries(gymNameMap)) {
+      if (lowercaseName === key.toLowerCase()) {
+        return value;
+      }
+    }
+    
+    // Then try partial match
     for (const [key, value] of Object.entries(gymNameMap)) {
       if (lowercaseName.includes(key.toLowerCase())) {
         return value;
       }
     }
-    return name; // Return original if no mapping found
+    
+    // If no match found, try to find the closest match in the actual gyms list
+    const matchingGym = gyms.find(gym => 
+      gym.name.toLowerCase().includes(lowercaseName) || 
+      lowercaseName.includes(gym.name.toLowerCase())
+    );
+    
+    if (matchingGym) {
+      return matchingGym.name;
+    }
+    
+    // If still no match, return the original name with proper capitalization
+    return name.split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   };
 
   const processLeadData = async (data: string) => {
