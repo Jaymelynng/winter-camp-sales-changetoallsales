@@ -24,24 +24,32 @@ interface LeadDialogProps {
 export function LeadDialog({ lead, onSave, gymId }: LeadDialogProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: lead || {
-      full_name: "",
-      parent_name: "",
-      phone: "",
-      email: "",
-      event: "",
-      facility: "",
-      notes: "",
-      status: "new",
-      gym_id: gymId || null,
+    defaultValues: {
+      full_name: lead?.full_name || "",
+      parent_name: lead?.parent_name || "",
+      phone: lead?.phone || "",
+      email: lead?.email || "",
+      event: lead?.event || "",
+      facility: lead?.facility || "",
+      notes: lead?.notes || "",
+      status: lead?.status || "new",
+      gym_id: lead?.gym_id || gymId || null,
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    onSave({
-      ...values,
-      gym_id: values.gym_id || null,
-    });
+    const leadData: LeadInput = {
+      full_name: values.full_name,
+      parent_name: values.parent_name,
+      phone: values.phone,
+      email: values.email,
+      event: values.event,
+      facility: values.facility,
+      notes: values.notes || "",
+      status: values.status,
+      gym_id: values.gym_id,
+    };
+    onSave(leadData);
     toast.success("Lead saved successfully!");
   }
 
