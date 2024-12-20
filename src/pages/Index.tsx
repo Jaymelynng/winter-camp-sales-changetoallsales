@@ -7,7 +7,6 @@ import { Lead, LeadInput } from "@/types/lead";
 import { toast } from "sonner";
 import { useLeads } from "@/hooks/useLeads";
 import { useGym } from "@/contexts/GymContext";
-import { SalesToolkit } from "@/components/SalesToolkit";
 
 const Index = () => {
   const [selectedLead, setSelectedLead] = useState<Lead | undefined>();
@@ -66,38 +65,35 @@ const Index = () => {
   };
 
   return (
-    <div className="flex h-screen bg-[#f9fafb]">
-      <div className="flex-1 overflow-auto">
-        <div className="container py-10">
-          <div className="flex flex-col space-y-8">
-            <div className="flex justify-between items-center">
-              <LeadDialog
-                lead={selectedLead}
-                onSave={handleSaveLead}
-                gymId={currentGym?.id}
-              />
-            </div>
-
-            <LeadHeader onExport={handleExportLeads} />
-
-            <StatsCards leads={filteredLeads} />
-
-            {isLoading ? (
-              <div className="flex justify-center items-center h-64">
-                <p className="text-[#8f93a0]">Loading leads...</p>
-              </div>
-            ) : (
-              <LeadsTable
-                leads={filteredLeads}
-                onEdit={setSelectedLead}
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
-              />
-            )}
+    <div className="h-screen bg-[#f9fafb]">
+      <div className="container py-10">
+        <div className="flex flex-col space-y-8">
+          <div className="flex justify-between items-center">
+            <LeadDialog
+              lead={selectedLead}
+              onSave={handleSaveLead}
+              gymId={currentGym?.id}
+            />
           </div>
+
+          <LeadHeader onExport={handleExportLeads} />
+
+          <StatsCards leads={filteredLeads} />
+
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <p className="text-[#8f93a0]">Loading leads...</p>
+            </div>
+          ) : (
+            <LeadsTable
+              leads={filteredLeads}
+              onEdit={setSelectedLead}
+              searchTerm={searchTerm}
+              onSearchChange={setSearchTerm}
+            />
+          )}
         </div>
       </div>
-      <SalesToolkit />
     </div>
   );
 };
