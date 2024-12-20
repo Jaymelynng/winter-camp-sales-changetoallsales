@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/lib/supabase";
+import { getGyms } from "@/lib/supabase";
 import { toast } from "sonner";
 
 interface Gym {
@@ -19,24 +19,24 @@ interface GymContextType {
 const GymContext = createContext<GymContextType | undefined>(undefined);
 
 export function GymProvider({ children }: { children: ReactNode }) {
-  const [currentGym, setCurrentGym] = useState<Gym | null>(null);
+  const [currentGym, setCurrentGym] = useState<Gym | null>(() => {
+    const saved = localStorage.getItem('currentGym');
+    return saved ? JSON.parse(saved) : null;
+  });
 
   const { data: gyms = [], isLoading } = useQuery({
     queryKey: ["gyms"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("gyms")
-        .select("*")
-        .order("name");
-
-      if (error) {
-        toast.error("Failed to load gyms");
-        throw error;
-      }
-
-      return data as Gym[];
+    queryFn: getGyms,
+    onError: () => {
+      toast.error("Failed to load gyms");
     },
   });
+
+  useEffect(() => {
+    if (currentGym) {
+      localStorage.setItem('currentGym', JSON.stringify(currentGym));
+    }
+  }, [currentGym]);
 
   return (
     <GymContext.Provider value={{ currentGym, setCurrentGym, gyms, isLoading }}>
